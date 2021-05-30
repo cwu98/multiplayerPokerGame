@@ -8,4 +8,71 @@ function generateId(length) {
     return result;
 }
 
-module.exports = generateId;
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+  
+      // And swap it with the current element.
+      temp = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temp;
+    }
+  
+    return array;
+  }
+
+function initState() {
+  return gameState = {
+    gameName: "",
+    players: {},
+    clientIds: [],
+    host: "",
+    id: null,
+    startGame: false
+  }
+}
+
+const suits = ["diamonds", "clubs", "hearts", "spades"];
+const ranks = [
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "J",
+  "Q",
+  "K",
+  "A",
+  "2",
+];
+
+
+//comparator to sort cards based on suit in ascending order
+const sortBySuit = (a, b) =>
+    suits.indexOf(a.suit) - suits.indexOf(b.suit);
+
+//comparator to sort cards based on rank in ascending order
+const sortByRank = (a, b) =>
+  ranks.indexOf(a.value) - ranks.indexOf(b.value);
+
+const sortCards = (hand) => {
+    const sortedHand = [...hand.sort(sortBySuit).sort(sortByRank)]
+    return sortedHand
+}
+module.exports = {
+    generateId,
+    shuffle,
+    initState,
+    sortCards,
+    suits,
+    ranks
+}
