@@ -4,23 +4,27 @@ const http = require('http')
 const server = http.createServer(app)
 const io = require('socket.io')(server,{ cors:{origin: "*"}})
 const port = 8080;
-const {generateId, shuffle, initState, sortCards}  = require("./helpers")
+const {generateId, shuffle, initState, sortCards, getStartPlayer}  = require("./helpers")
 const deck = require("./constants")
+const { start } = require("repl")
 
 var clientRooms = {}
 var states = {}
 
 io.on('connection', (socket) => {
     console.log('A user connected with id:', socket.id)
-    const data = {
-        clientId: socket.id
-    }
-    socket.emit("connected", data)
+
+    socket.emit("connected", { clientId: socket.id })
     socket.emit('getGamesList', states)
     socket.on('join', handleJoinGame);
     socket.on('create', handleCreateGame);
     socket.on('getGamesList', handleGetGamesList);
     socket.on('start', handleStartGame)
+    socket.on('leave', handleLeaveGame)
+    socket.on('pass', handlePlayerPass);
+    socket.on('disconnect', function(){
+        console.log("socket disconnected")
+    })
 
     /** HANDLERS **/
     function handleCreateGame(data){
@@ -39,14 +43,13 @@ io.on('connection', (socket) => {
             gameState: state,
             currentGid: gameId
         }
-        socket.emit('created', payload)
-        socket.emit('update', payload)
-        states[gameId] = state
         socket.join(gameId)
+        states[gameId] = state
+        io.sockets.in(gameId).emit('created', payload)
+        io.sockets.in(gameId).emit('update', payload)
     } 
 
-    function handleGetGamesList(msg){
-        console.log(msg)
+    function handleGetGamesList(){
         socket.emit('getGamesList', states)
     }
 
@@ -57,7 +60,7 @@ io.on('connection', (socket) => {
                 playerName: payload.playerName
             }
             game.clientIds.push(payload.clientId)
-            clientRooms[data.clientId] = payload.gid;
+            clientRooms[payload.clientId] = payload.gid;
             
             socket.join(payload.gid)
             let res = {
@@ -65,8 +68,8 @@ io.on('connection', (socket) => {
                 gameState: game,
                 currentGid: payload.gid
             }
-            io.emit('update', res)
-            socket.emit('joined', payload)
+            io.sockets.in(payload.gid).emit('update', res)
+            io.sockets.in(payload.gid).emit('joined', payload)
         } else {
             console.log("game is undefined")
         }
@@ -89,12 +92,51 @@ io.on('connection', (socket) => {
             gameState.players[cid].hand = sortCards(shuffledDeck.slice(i*cardsPerPlayer, (i+1)*cardsPerPlayer))
             i++;
         })
+        const startingPlayer = getStartPlayer(gameState)
+        console.log('first player turn',startingPlayer)
+
+        gameState.playerTurn.clientId = gameState.clientIds[startingPlayer];
+        gameState.playerTurn.index = startingPlayer;
+        //console.log(gameState.playerTurn)
+        console.log("start game",gameState)
         io.sockets.in(gameId).emit('update', res)
     }
 
-    socket.on('disconnet', function(){
-        console.log("socket disconnected")
-    })
+   
+
+    function handleLeaveGame(payload){
+        const cId = data.clientId;
+        const gameId = payload.gid;
+        if (cId in clientRooms){
+            clientRooms[cId] = null;
+        }
+        if (cId in states[gameId].players) {
+            if(states[gameId].host == cId) {
+                console.log("host leaving game")
+                console.log("assign random host")
+            }
+            delete states[gameId].players[cId];
+        }
+    }
+
+    function handlePlayerPass(payload) {
+        const cId = payload.clientId;
+        const gameId = payload.gid;
+        const gameState = states[gameId];
+        gameState.players[cId].pass = true;
+        var nextIndex = (states[gameId].playerTurn.index + 1) % gameState.clientIds.length
+        var nextcId = gameState.clientIds[nextIndex];
+        gameState.playerTurn.clientId = nextcId;
+        gameState.playerTurn.index = nextIndex;
+        console.log("next player turn",gameState.playerTurn.index, gameState.playerTurn.clientId)
+        let res = {
+            clientId: cId,
+            gameState: gameState,
+            currentGid: gameId
+        }
+        console.log(gameState)
+        io.sockets.in(gameId).emit('update', res);
+    }
 })
 
 

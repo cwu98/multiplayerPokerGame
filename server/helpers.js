@@ -34,7 +34,8 @@ function initState() {
     clientIds: [],
     host: "",
     id: null,
-    startGame: false
+    startGame: false,
+    playerTurn: {}
   }
 }
 
@@ -68,11 +69,27 @@ const sortCards = (hand) => {
     const sortedHand = [...hand.sort(sortBySuit).sort(sortByRank)]
     return sortedHand
 }
+
+// get player that has diamond 3, this player goes first
+const getStartPlayer = (gameState) => {
+  for(let i = 0; i < gameState.clientIds.length; i++){
+    let cId = gameState.clientIds[i];
+    for(let j = 0; j < gameState.players[cId].hand.length; j++){
+      let card = gameState.players[cId].hand[j];
+      if(card.suit === "diamonds" && card.value === "3"){
+        return i;
+      }
+    }
+  }
+}
+
+
 module.exports = {
     generateId,
     shuffle,
     initState,
     sortCards,
+    getStartPlayer,
     suits,
     ranks
 }
