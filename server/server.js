@@ -22,7 +22,15 @@ io.on('connection', (socket) => {
     socket.on('pass', handlePlayerPass);
     socket.on('playCards', handlePlayCards)
     socket.on('disconnect', function(){
-        console.log("socket disconnected")
+        console.log("socket disconnected",socket.id)
+        if(clientRooms[socket.id]) {
+            const gameId = clientRooms[socket.id]
+            const payload = {
+                clientId: socket.id,
+                gid: gameId
+            }
+            handleLeaveGame(payload)
+        }
     })
 
     /** HANDLERS **/
@@ -101,13 +109,16 @@ io.on('connection', (socket) => {
    
 
     function handleLeaveGame(payload){
-        const cId = data.clientId;
+        const cId = payload.clientId;
         const gameId = payload.gid;
-        if (cId in clientRooms){
-            clientRooms[cId] = null;
+        if (clientRooms[cId]){
+            console.log(`${cId} left.`)
+            clientRooms = clientRooms.filter((id) => id !== cId)
         }
-        if (cId in states[gameId].players) {
-            if(states[gameId].host == cId) {
+        if (states[gameId]?.players[cId]) {
+            if(states[gameId].host == cId && states[gameId].host === states[gameId].clientIds[0]) {
+                states[gameId].clientIds.shift();
+                states[gameId].host = states[gameId].clientIds[0]
                 console.log("host leaving game")
                 console.log("assign random host")
             }
@@ -137,13 +148,20 @@ io.on('connection', (socket) => {
         const cId = payload.clientId
         const gameId = payload.gid
         const gameState = states[gameId]
+        if(!gameState){
+            //socket.emit('error', msg)
+            return
+        }
         const cards = payload.cards
         gameState.players[cId].hand = payload.newHand
         gameState.currentPlay = cards;
-        var nextIndex = (states[gameId].playerTurn.index + 1) % gameState.clientIds.length
-        var nextcId = gameState.clientIds[nextIndex];
-        gameState.playerTurn.clientId = nextcId;
-        gameState.playerTurn.index = nextIndex;
+        //edge case: player plays spade 2, gets to go again
+        if(!(cards.length == 1 && (cards[0].value === '2' && cards[0].suit === 'spades'))) {
+            var nextIndex = (states[gameId].playerTurn.index + 1) % gameState.clientIds.length
+            var nextcId = gameState.clientIds[nextIndex];
+            gameState.playerTurn.clientId = nextcId;
+            gameState.playerTurn.index = nextIndex;
+        } 
         let res = {
             clientId: cId,
             gameState: gameState,
