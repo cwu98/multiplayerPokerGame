@@ -1,0 +1,339 @@
+.App {
+  text-align: center;
+}
+
+::-webkit-scrollbar {
+	width: .5rem;
+}
+
+::-webkit-scrollbar-thumb {
+	background: darkgray;
+	border: 2px solid #111;
+  border-radius: 99vmax;
+
+}
+
+::-webkit-scrollbar-track {
+	background: whitesmoke
+}
+
+#wrapper {
+  margin-left:auto;
+  margin-right:auto;
+}
+.home-btn {
+  width: 200px;
+  height: 60px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #000;
+  background-color: #EFFFFD;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+
+}
+
+.home-btn:hover {
+  background-color: slategrey;
+  box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+  color: #fff;
+  transform: translateY(-7px);
+}
+
+.navbar.navbar-custom {
+  position: static;
+  background-color: #3386FF;
+  height: 70px;
+  width: 100%;
+  max-width: 100%;
+  color: white;
+  font-size: 20px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  z-index: 0;
+}
+
+.input {
+  height: 50px
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+
+  
+}
+.cards {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  float: left;
+  
+}
+
+.pileCards{
+  width: 40%;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 80px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  border-style: solid;
+  border-color: skyblue;
+  border-width: 5px;
+  border-radius: 30px;
+}
+
+.message{
+  padding-right: 80px;
+}
+
+.game {
+  margin: auto;
+  display: block;
+}
+
+.black {
+  color: black;
+}
+
+h1.suit {
+  margin-top: -10px;
+  font-size: 50px;
+}
+
+.card-focus {
+  transform: translateY(-1.5rem);
+}
+
+.playerInterface{
+  overflow:hidden;
+  vertical-align: middle;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  padding-left: 50px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-style: outset;
+  height: 175px;
+  width: 100%;
+}
+
+.playerTurn{
+  border-style: solid;
+  border-color:orange;
+  border-width: 6px;
+}
+
+.btn-group {
+  position: absolute;
+  width: 120px;
+  left: 900px;
+  top: -110px;
+  display: inline-flex;
+  vertical-align: middle;
+  flex-direction: column;
+}
+
+
+.name{
+  font-size: 18px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  position: absolute;
+  
+}
+
+.selected {
+  transform: translateY(-1.5rem);
+}
+
+.card {
+  text-align: center;
+  width: 6rem;
+  height: 8.3rem;
+  background: white;
+  border-radius: 5px;
+  border: .3px solid black;
+  box-shadow: 3px 3px gainsboro;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-left: -50px;
+  cursor:grab;
+}
+.cd {
+  display: block;
+}
+
+.top{
+ text-align: left;
+}
+
+.red{
+  color: red;
+}
+
+span.cd.suit {
+  font-size: 18px;
+  margin-top: -8px;
+}
+span.cd.value {
+  font-size: 18px;
+}
+.bottom{
+  text-align: left;
+  margin-top: -10px;
+}
+
+.card:hover{
+  transform: translateY(-1.5rem);
+}
+
+
+.valueRotate{
+  transform: rotate(180deg);
+}
+
+.suitRotate{
+  transform: rotate(180deg);
+}
+
+.span.cd.suit.bottom.suitRotate {
+  font-size: 18px;
+  margin-top: 5px;
+}
+
+.card-back {
+  margin-left: -50px;
+  width: 6rem;
+  height: 8.3rem;
+  border: .3px solid black;
+  box-shadow: 3px 3px gainsboro;
+  border-radius: 5px;
+  border: .3px solid black;
+  background: rgb(238,174,202);
+  background: linear-gradient(rgba(238,174,202,1), rgba(148,187,233,1));
+}
+
+.leavebtn {
+  position: relative;
+  margin-bottom: 10px;
+  left: 10px;
+}
+
+.collapseWrapper {
+  position: relative;
+  max-width: 50%;
+  right: 100px;
+  bottom: 3px;
+}
+
+div.hover{
+  border-color:darkorange;
+}
+
+input[type='checkbox'] {
+  display: none;
+}
+
+.wrap-collapsible {
+  width: 100%
+}
+
+.toggle {
+  display: inline;
+ 
+}
+
+.fa:hover {
+  color: lavender;
+}
+
+.lbl-toggle {
+  font-weight: bold;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+
+  padding: 1rem;
+
+  color: whitesmoke;
+  background: transparent;
+
+  cursor: pointer;
+  border-radius: 7px;
+  transition: all 0.25s ease-out;
+}
+
+.lbl-toggle:hover {
+  color: darkslategrey;
+}
+
+
+.lbl-toggle::before {
+  content: ' ';
+  display: inline-block;
+
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid currentColor;
+
+  vertical-align: middle;
+  margin-right: .7rem;
+
+  transition: transform .2s ease-out;
+}
+
+.collapsible-content .content-inner {
+  background: rgba(5, 5, 5, 0.9);
+  border-bottom: 1px solid lightslategray;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  padding: .5rem 1rem;
+}
+
+.pre {
+  color: white;
+}
+
+.collapsible-content {
+  max-height: 0px;
+  overflow:scroll;
+  transition: max-height .25s ease-in-out;
+  position: absolute;
+  z-index: 2;
+  right: 1px;
+  width: 1000px;
+  color: white;
+}
+
+.toggle:checked + .lbl-toggle + .collapsible-content {
+  max-height: 100vh;
+}
+
+.toggle:checked + .lbl-toggle::before {
+  transform: rotate(90deg);
+}
+
+.toggle:checked + .lbl-toggle {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
