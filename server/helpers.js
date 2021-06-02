@@ -35,7 +35,8 @@ function initState() {
     host: "",
     id: null,
     startGame: false,
-    playerTurn: {}
+    playerTurn: {},
+    currentPlay: []
   }
 }
 
@@ -82,6 +83,7 @@ const getStartPlayer = (gameState) => {
     }
   }
 }
+
 
 
 module.exports = {

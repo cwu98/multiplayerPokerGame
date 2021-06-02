@@ -6,7 +6,6 @@ const io = require('socket.io')(server,{ cors:{origin: "*"}})
 const port = 8080;
 const {generateId, shuffle, initState, sortCards, getStartPlayer}  = require("./helpers")
 const deck = require("./constants")
-const { start } = require("repl")
 
 var clientRooms = {}
 var states = {}
@@ -15,13 +14,13 @@ io.on('connection', (socket) => {
     console.log('A user connected with id:', socket.id)
 
     socket.emit("connected", { clientId: socket.id })
-    socket.emit('getGamesList', states)
     socket.on('join', handleJoinGame);
     socket.on('create', handleCreateGame);
     socket.on('getGamesList', handleGetGamesList);
     socket.on('start', handleStartGame)
     socket.on('leave', handleLeaveGame)
     socket.on('pass', handlePlayerPass);
+    socket.on('playCards', handlePlayCards)
     socket.on('disconnect', function(){
         console.log("socket disconnected")
     })
@@ -93,12 +92,9 @@ io.on('connection', (socket) => {
             i++;
         })
         const startingPlayer = getStartPlayer(gameState)
-        console.log('first player turn',startingPlayer)
 
         gameState.playerTurn.clientId = gameState.clientIds[startingPlayer];
         gameState.playerTurn.index = startingPlayer;
-        //console.log(gameState.playerTurn)
-        console.log("start game",gameState)
         io.sockets.in(gameId).emit('update', res)
     }
 
@@ -128,13 +124,31 @@ io.on('connection', (socket) => {
         var nextcId = gameState.clientIds[nextIndex];
         gameState.playerTurn.clientId = nextcId;
         gameState.playerTurn.index = nextIndex;
-        console.log("next player turn",gameState.playerTurn.index, gameState.playerTurn.clientId)
         let res = {
             clientId: cId,
             gameState: gameState,
             currentGid: gameId
         }
-        console.log(gameState)
+        io.sockets.in(gameId).emit('update', res);
+    }
+
+
+    function handlePlayCards(payload) {
+        const cId = payload.clientId
+        const gameId = payload.gid
+        const gameState = states[gameId]
+        const cards = payload.cards
+        gameState.players[cId].hand = payload.newHand
+        gameState.currentPlay = cards;
+        var nextIndex = (states[gameId].playerTurn.index + 1) % gameState.clientIds.length
+        var nextcId = gameState.clientIds[nextIndex];
+        gameState.playerTurn.clientId = nextcId;
+        gameState.playerTurn.index = nextIndex;
+        let res = {
+            clientId: cId,
+            gameState: gameState,
+            currentGid: gameId
+        }
         io.sockets.in(gameId).emit('update', res);
     }
 })
