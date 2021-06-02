@@ -21,6 +21,7 @@ io.on('connection', (socket) => {
     socket.on('leave', handleLeaveGame)
     socket.on('pass', handlePlayerPass);
     socket.on('playCards', handlePlayCards)
+    socket.on('newgame', handleStartGame)
     socket.on('disconnect', function(){
         console.log("socket disconnected",socket.id)
         if(clientRooms[socket.id]) {
@@ -113,7 +114,7 @@ io.on('connection', (socket) => {
         const gameId = payload.gid;
         if (clientRooms[cId]){
             console.log(`${cId} left.`)
-            clientRooms = clientRooms.filter((id) => id !== cId)
+            delete clientRooms[cId]
         }
         if (states[gameId]?.players[cId]) {
             if(states[gameId].host == cId && states[gameId].host === states[gameId].clientIds[0]) {
@@ -168,6 +169,10 @@ io.on('connection', (socket) => {
             currentGid: gameId
         }
         io.sockets.in(gameId).emit('update', res);
+    }
+
+    function handleNewGame(payload) {
+
     }
 })
 
