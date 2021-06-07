@@ -2,16 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import { handleCreateGame } from "../../handlers";
 import { useHistory } from "react-router-dom";
 import Button from "../../components/Button";
-import Header from "../../components/Header";
 import GamesList from "../GamesList/GamesList";
-import Game from "./Game";
 import socket from "../../config";
 
 function CreateGame(props) {
     const gameState = props.gameState;
     const [playerName, setPlayerName] = useState("");
     const [gameName, setGameName] = useState("");
-    const currentGid = useRef(gameState?.id);
+  //  const currentGid = useRef(gameState?.id);
     const history = useHistory();
 
     useEffect(() => {

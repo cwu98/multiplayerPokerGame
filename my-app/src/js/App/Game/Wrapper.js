@@ -1,11 +1,9 @@
 import Navbar from "../../components/Navbar";
 import socket from "../../config";
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import CreateGame from "./CreateGame"
 import JoinGame from "./JoinGame"
-import Card from "../../components/Card"
 
 function Wrapper(){
     const [clientId, setClientId] = useState("");

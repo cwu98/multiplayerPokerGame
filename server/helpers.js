@@ -28,7 +28,7 @@ function shuffle(array) {
   }
 
 function initState() {
-  return gameState = {
+  return {
     gameName: "",
     players: {},
     clientIds: [],

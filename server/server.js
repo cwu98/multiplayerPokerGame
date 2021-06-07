@@ -1,12 +1,22 @@
 const express = require("express")
 const app = express()
+const cors = require('cors');
+app.use(cors());
 const http = require('http')
+const path = require('path')
 const server = http.createServer(app)
 const io = require('socket.io')(server,{ cors:{origin: "*"}})
 const port = 8080;
 const {generateId, shuffle, initState, sortCards, getStartPlayer}  = require("./helpers")
 const deck = require("./constants")
+const router = require('./src/router')
 
+app.use(express.static(path.join(__dirname,'public')));
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}))
+app.use(router);
 var clientRooms = {}
 var states = {}
 
@@ -101,7 +111,7 @@ io.on('connection', (socket) => {
             i++;
         })
         const startingPlayer = getStartPlayer(gameState)
-
+        gameState.currentPlay = [];
         gameState.playerTurn.clientId = gameState.clientIds[startingPlayer];
         gameState.playerTurn.index = startingPlayer;
         io.sockets.in(gameId).emit('update', res)
@@ -125,6 +135,7 @@ io.on('connection', (socket) => {
             }
             delete states[gameId].players[cId];
         }
+        states[gameId].startGame=false;
     }
 
     function handlePlayerPass(payload) {
@@ -171,11 +182,10 @@ io.on('connection', (socket) => {
         io.sockets.in(gameId).emit('update', res);
     }
 
-    function handleNewGame(payload) {
-
-    }
+    
 })
 
 
 
-io.listen(port)
+//io.listen(port)
+server.listen(port);

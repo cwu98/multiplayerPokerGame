@@ -1,11 +1,8 @@
 import React from "react"
-import { useEffect, useState } from "react"
 // import PlayedCards from "./PlayedCards"
 import PlayerHand from "../../components/PlayerHand"
 import Card from "../../components/Card"
 import PlayedCardsPile from "./PlayedCardsPile"
-import CardBack from "../../components/CardBack"
-
 
 
 function PlayGame(props){
@@ -28,7 +25,7 @@ function PlayGame(props){
             clientId={clientId}
             myClientId={cId}
             playerTurn={gameState.playerTurn.clientId}
-            self={cId==clientId ? true : false}/> 
+            self={cId===clientId ? true : false}/> 
             
         ))}
         </div>

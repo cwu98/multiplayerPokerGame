@@ -1,10 +1,8 @@
 import { handleJoinGame, handleLeaveGame } from "../../handlers";
 import Button from "../../components/Button";
-import Header from "../../components/Header";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import Game from "./Game";
-import Navbar from "../../components/Navbar"
 
 function JoinGame(props) {
     const gameState = props.gameState
@@ -15,7 +13,7 @@ function JoinGame(props) {
         window.onpopstate = () => {
             handleLeaveGame(props.clientId, gid)
         }
-    }, [])
+    }, [props.clientId, gid])
     if (gameState) {
         return (
             <Game

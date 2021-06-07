@@ -1,12 +1,10 @@
 import React from "react";
-import socket from "../../config";
 import { handleStartGame } from "../../handlers"
 import JoinLink from "./JoinLink";
 
 function WaitingRoom(props){
     const clientId = props.clientId
     const gameState = props.gameState
-    const users = props.user
     return (
         <>
             <div className="flex flex-col space-y-2 my-2">

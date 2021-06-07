@@ -19,7 +19,7 @@ function PlayerHand(props){
 
     useEffect(()=>{
         setPlayerHand(props.gameState.players[clientId].hand)
-    },[props.gameState])
+    },[props.gameState, clientId])
 
     const handleSelectCard = (card) => {
         if(selectedCards && selectedCards.includes(card)){

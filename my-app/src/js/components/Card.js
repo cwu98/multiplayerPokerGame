@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 
 const suitSymbols = {
   diamonds: "♦",
@@ -17,7 +17,7 @@ function Card(props){
     }*/
     
     return (
-        <div className={`card ${suit=="diamonds" || suit=="hearts" ? "red" : "black"}`}>
+        <div className={`card ${suit==="diamonds" || suit==="hearts" ? "red" : "black"}`}>
           <div className="top">
             <span className="cd value">{value ? value : "?"}</span>
             <span className="cd suit">{suit ? suitSymbols[suit] : "?"}</span>
