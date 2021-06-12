@@ -27,11 +27,11 @@ io.on('connection', (socket) => {
     socket.on('join', handleJoinGame);
     socket.on('create', handleCreateGame);
     socket.on('getGamesList', handleGetGamesList);
-    socket.on('start', handleStartGame)
-    socket.on('leave', handleLeaveGame)
+    socket.on('start', handleStartGame);
+    socket.on('leave', handleLeaveGame);
     socket.on('pass', handlePlayerPass);
-    socket.on('playCards', handlePlayCards)
-    socket.on('newgame', handleStartGame)
+    socket.on('playCards', handlePlayCards);
+    socket.on('newgame', handleNewGame);
     socket.on('disconnect', function(){
         console.log("socket disconnected",socket.id)
         if(clientRooms[socket.id]) {
@@ -103,8 +103,7 @@ io.on('connection', (socket) => {
             currentGid: gameId
         }
         let shuffledDeck = shuffle(deck)
-          // Object.keys(gameState.players).length
-        let cardsPerPlayer = Math.floor(52/4)
+        let cardsPerPlayer = Math.floor(52/gameState.clientIds.length);
         let i = 0
         Object.keys(gameState.players).forEach((cid) => {
             gameState.players[cid].hand = sortCards(shuffledDeck.slice(i*cardsPerPlayer, (i+1)*cardsPerPlayer))
@@ -116,8 +115,6 @@ io.on('connection', (socket) => {
         gameState.playerTurn.index = startingPlayer;
         io.sockets.in(gameId).emit('update', res)
     }
-
-   
 
     function handleLeaveGame(payload){
         const cId = payload.clientId;
@@ -136,6 +133,12 @@ io.on('connection', (socket) => {
             delete states[gameId].players[cId];
         }
         states[gameId].startGame=false;
+        let res = {
+            clientId: cId,
+            gameState: states[gameId],
+            currentGid: gameId
+        }
+        io.sockets.in(gameId).emit('update', res)
     }
 
     function handlePlayerPass(payload) {
@@ -161,7 +164,6 @@ io.on('connection', (socket) => {
         const gameId = payload.gid
         const gameState = states[gameId]
         if(!gameState){
-            //socket.emit('error', msg)
             return
         }
         const cards = payload.cards
@@ -179,9 +181,17 @@ io.on('connection', (socket) => {
             gameState: gameState,
             currentGid: gameId
         }
+        if (!gameState.winner && gameState.players[cId].hand.length === 0){
+            gameState.winner = cId;
+            gameState.gameEnd = true;        
+        }
         io.sockets.in(gameId).emit('update', res);
     }
 
+    function handleNewGame(payload){
+        states[payload.gid].winner = "";
+        handleStartGame(payload);
+    }
     
 })
 

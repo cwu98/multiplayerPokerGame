@@ -26,7 +26,7 @@ function WaitingRoom(props){
             <div className="d-flex py-4 justify-content-center">
             {gameState.host === clientId && (
                 <div className="w-25">
-                    <button disabled={gameState.clientIds.length >= 2 ? false : true} className="btn btn-info btn-lg btn-block"
+                    <button disabled={gameState.clientIds.length >= 3 ? false : true} className="btn btn-info btn-lg btn-block"
                     onClick={() => handleStartGame(clientId, gameState.id)}>Start</button>
                 </div>
                 )}

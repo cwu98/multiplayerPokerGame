@@ -16,7 +16,7 @@ function PlayerHand(props){
     const playerTurn = props.playerTurn;
     const [playerHand, setPlayerHand ] = useState(gameState.players[clientId].hand);
     const [selectedCards, setSelectedCards] = useState([]);
-
+    
     useEffect(()=>{
         setPlayerHand(props.gameState.players[clientId].hand)
     },[props.gameState, clientId])

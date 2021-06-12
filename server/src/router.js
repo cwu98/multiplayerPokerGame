@@ -18,7 +18,6 @@ function camelCaseKeys(hashmap) {
   })
   router.get('/token/:id?', (req, res) => {
     const id = req.params.id;
-    console.log(id);
     res.send(tokenGenerator(id));
   });
   

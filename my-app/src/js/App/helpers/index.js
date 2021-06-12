@@ -33,6 +33,8 @@ const playerPassed = (gameState, clientId) => {
   return gameState.players[clientId].pass;
 }
 
+/*  handled in server side
+
 // returns the clientId of the winner
 export const getWinner = (gameState) => {
   for(let cId in gameState.clientIds){
@@ -47,7 +49,7 @@ export const getWinner = (gameState) => {
 export const gameOver = (gameState) => {
   var emptyHands = gameState.clientIds.filter((cId) => gameState.players[cId].hand.length == 0)
   return emptyHands > 0;
-}
+} */ 
 
 // player has freebie when all players pass or
 export const freebie = (gameState) => {

@@ -54,6 +54,7 @@ export function handlePass(clientId, gid) {
 }
 
 export function handleNewGame(clientId, gid) {
+    console.log('new game');
     const payload = {
         clientId: clientId,
         gid: gid

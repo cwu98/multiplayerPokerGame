@@ -12,7 +12,7 @@ function ChatWindow(props) {
 
     let scrollDiv = useRef(null);
 
-    const playerName = props.playerName || "Josh";
+    const playerName = props.playerName || "Undefined Player";
     const updateText = e => setText(e);
     const getToken = async (playerName) => {
         const response = await axios.get(`http://localhost:8080/token/${playerName}`);

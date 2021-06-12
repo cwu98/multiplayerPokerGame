@@ -32,11 +32,13 @@ function initState() {
     gameName: "",
     players: {},
     clientIds: [],
-    host: "",
-    id: null,
+    host: undefined,
+    id: undefined,
     startGame: false,
     playerTurn: {},
-    currentPlay: []
+    currentPlay: [],
+    winner: "",
+    gameEnd: false
   }
 }
 
